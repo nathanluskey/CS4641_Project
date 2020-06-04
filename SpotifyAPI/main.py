@@ -3,6 +3,10 @@ import os
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
+#imports for a GUI if you want
+# import tkinter as tk
+# from tkinter import simpledialog
+
 #for os information look at https://able.bio/rhett/how-to-set-and-get-environment-variables-in-python--274rgt5
 os.environ["SPOTIPY_CLIENT_ID"] = secrets.SPOTIPY_CLIENT_ID
 os.environ["SPOTIPY_CLIENT_SECRET"] = secrets.SPOTIPY_CLIENT_SECRET
@@ -10,7 +14,13 @@ os.environ["SPOTIPY_CLIENT_SECRET"] = secrets.SPOTIPY_CLIENT_SECRET
 #Taken from https://github.com/plamere/spotipy
 sp = spotipy.Spotify(client_credentials_manager = SpotifyClientCredentials())
 
-nathanPlaylist = sp.playlist("5wUsCg6wm1t5dVYMfhMgi1")
+# For a GUI if you want
+# application_window = tk.Tk()
+# answer = simpledialog.askstring("Input", "Enter the URL of your favorite spotify playlist", parent=application_window)
+answer = "spotify:playlist:37i9dQZF1DWZreqadA03A8"
+
+
+nathanPlaylist = sp.playlist(answer)
 #This is a python dict, so use .keys() repeatedly to find what we want
 
 #Printing out the first song of a playlist
@@ -18,5 +28,8 @@ nathanPlaylist = sp.playlist("5wUsCg6wm1t5dVYMfhMgi1")
 
 #This loop prints all song names in a playlist
 for i in nathanPlaylist["tracks"]["items"]:
-    songName = i["track"]["name"]
-    print(songName)
+    try:
+        songName = i["track"]["name"]
+        print(songName)
+    except Exception as e:
+        print(e)
