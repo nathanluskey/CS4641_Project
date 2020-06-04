@@ -8,11 +8,11 @@ Our goal is to match *your* music tastes for customized running playlists.
 We want to help *you* find songs to match *your* workout tempo __and__ personal taste of music.  
 
 #### What?
-* Need to do more research, but we'll get back to you!
+Need to do more research, but we'll get back to you!
 
 
 #### How?
-* Unsure so far...
+Unsure so far...
 
 ## Data
 The [million songs data](http://millionsongdataset.com/).
