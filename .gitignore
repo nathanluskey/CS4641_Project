@@ -1,0 +1,5 @@
+# for storing spotify credential info
+secrets.py
+
+# ignore anything in pycache
+*.pyc
