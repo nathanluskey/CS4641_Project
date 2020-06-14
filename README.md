@@ -17,4 +17,4 @@ Unsure so far...
 ## Data
 The [million songs data](http://millionsongdataset.com/).
 
-This is a collaboration between Nathan Luskey, Reagan Matthews, & Dylan Reese.
+This is a collaboration between Nathan Luskey, Reagan Matthews, Dylan Reese, & David Wen.
