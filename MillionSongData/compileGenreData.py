@@ -38,6 +38,9 @@ if __name__ == "__main__":
         pickle.dump(allTrackID, f)
     with open("trackIDGenrePairs.pickle", "wb") as f:
         pickle.dump(trackIDGenrePairs, f)
+    #Example to Open file:
+    # with open("allTrackID.pickle", "rb") as f:
+    #     a = pickle.load(f)
 
     # #Tagtraum incorporates the topMAGD data, so no need to read it
     # topMAGD = False
