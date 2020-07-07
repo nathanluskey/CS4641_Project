@@ -33,27 +33,26 @@ if __name__ == "__main__":
         line = tagtraum.readline()
 
     tagtraum.close
-    #TODO: Use cPickle to store variables for dict and set
-    # trackIDFile = 
+    # Use cPickle to store variables for dict and set
     with open("allTrackID.pickle", "wb") as f:
         pickle.dump(allTrackID, f)
     with open("trackIDGenrePairs.pickle", "wb") as f:
         pickle.dump(trackIDGenrePairs, f)
 
-    #Tagtraum incorporates the topMAGD data, so no need to read it
-    topMAGD = False
-    if topMAGD:
-        import requests
-        # topMAGD = requests.get("https://www.w3schools.com/python/ref_requests_response.asp")
-        print("Requesting Webpage", end="\r")
-        topMAGD = requests.get("http://www.ifs.tuwien.ac.at/mir/msd/partitions/msd-MAGD-genreAssignment.cls")
-        print("Webpage Loaded Successfully", end="\n")
-        topMAGD = topMAGD.text #Returns a string of the webpage
-        topMAGD = topMAGD.split("\n")
-        print("Total Songs: {}".format(len(topMAGD)), end="\n")
-        for i in range(10): #range(len(topMAGD)):
-            print("Current Song: {}\r".format(i), end="\r")
-            currentLine = topMAGD[i]
-            #EXAMPLE LINE: TRAAAAK128F9318786\tPop_Rock
-            trackID = currentLine[:17]
-            genre = currentLine[19:]
+    # #Tagtraum incorporates the topMAGD data, so no need to read it
+    # topMAGD = False
+    # if topMAGD:
+    #     import requests
+    #     # topMAGD = requests.get("https://www.w3schools.com/python/ref_requests_response.asp")
+    #     print("Requesting Webpage", end="\r")
+    #     topMAGD = requests.get("http://www.ifs.tuwien.ac.at/mir/msd/partitions/msd-MAGD-genreAssignment.cls")
+    #     print("Webpage Loaded Successfully", end="\n")
+    #     topMAGD = topMAGD.text #Returns a string of the webpage
+    #     topMAGD = topMAGD.split("\n")
+    #     print("Total Songs: {}".format(len(topMAGD)), end="\n")
+    #     for i in range(10): #range(len(topMAGD)):
+    #         print("Current Song: {}\r".format(i), end="\r")
+    #         currentLine = topMAGD[i]
+    #         #EXAMPLE LINE: TRAAAAK128F9318786\tPop_Rock
+    #         trackID = currentLine[:17]
+    #         genre = currentLine[19:]
