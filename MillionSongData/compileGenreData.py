@@ -1,10 +1,12 @@
 import pickle5 as pickle
 
 def parseTagtraumLine(inputString):
-    trackID = line[:17]
+    # print("raw Line:\n{}".format(inputString))
+    trackID = line[:18]
     genre = line[19:-1]
     genre.replace("'", "")
     trackID.replace("'", "")
+    # print("TrackID = {} [{}], genre = {} [{}]".format(trackID, len(trackID), genre, len(genre)))
     return trackID, genre
 
 
@@ -30,7 +32,8 @@ if __name__ == "__main__":
             allTrackID.add(trackID)
             #Check that things seem reasonable
             if i % 8000 == 0:
-                print("track ID = {}, genre = {}".format(trackID, genre))
+                #Just checking that this seems to be parsing correctly
+                print("track ID = {} [{}], genre = {} [{}]".format(trackID, len(trackID), genre, len(genre)))
         i += 1
         line = tagtraum.readline()
 
