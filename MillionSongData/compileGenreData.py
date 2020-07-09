@@ -3,12 +3,14 @@ import pickle5 as pickle
 def parseTagtraumLine(inputString):
     trackID = line[:17]
     genre = line[19:-1]
+    genre.replace("'", "")
+    trackID.replace("'", "")
     return trackID, genre
 
 
 if __name__ == "__main__":
     #For the tagtraum data
-    tagtraum = open("msd_tagtraum_cd2c.cls", "r")
+    tagtraum = open("MillionSongData/msd_tagtraum_cd2c.cls", "r")
     line = tagtraum.readline()
     i = 1
     # Impliment dictionary to store values with key = TRACKID, value = genre
