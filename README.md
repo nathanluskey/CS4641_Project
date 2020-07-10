@@ -19,6 +19,6 @@ The [million songs data](http://millionsongdataset.com/).
 
 This is a collaboration between Nathan Luskey, Reagan Matthews, Dylan Reese, & David Wen.
 
-##Installation
+## Installation
 The data used in this project is obtained with dolthub, so you will need to install [dolt](https://www.dolthub.com/docs/tutorials/installation/)
 and [doltpy](https://www.dolthub.com/docs/tutorials/installation/).
