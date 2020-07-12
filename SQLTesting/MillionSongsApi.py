@@ -31,4 +31,11 @@ class Api:
         args = ['sql']
         args.extend(['--query', sql])
         tracks = self.repo.execute(args)
-        print(tracks[12])
+        startIndex = 3
+        endIndex = len(tracks) - 2
+        print("Start", startIndex)
+        print("End", endIndex)
+        for i in range(startIndex, endIndex):
+            print("Track " + str(i), tracks[i])
+
+
