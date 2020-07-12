@@ -1,10 +1,6 @@
 from MillionSongsApi import Api
-from doltpy.core import Dolt
-import os
-import sys
 
 # Test api
 api = Api()
-print('Track attributes', api.getTrackAttributes())
-print('Tracks', api.getTracks(count=10))
-#api.repo.sql("SHOW TABLES;")
+tracks = api.getTracks(10, offset=0)
+print("Track Id:", tracks[0]['track_id'])
