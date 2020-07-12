@@ -3,7 +3,8 @@ from doltpy.core import Dolt
 import os
 import sys
 
-# Check if million songs exists
+# Test api
 api = Api()
-api.getTracks(count=50, offset=20)
-api.repo.sql("SHOW TABLES;")
+print('Track attributes', api.getTrackAttributes())
+print('Tracks', api.getTracks(count=10))
+#api.repo.sql("SHOW TABLES;")
