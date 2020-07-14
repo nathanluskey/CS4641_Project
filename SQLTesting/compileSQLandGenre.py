@@ -27,12 +27,13 @@ if __name__ == "__main__":
     parentDirectory = os.path.dirname(os.getcwd())
     MillionSongDataDirectory = "{}\\MillionSongData".format(parentDirectory)
     #Load the set of all track id
-    with open("{}/allTrackID.pickle".format(MillionSongDataDirectory), "rb") as f:
+    with open("{}\\allTrackID.pickle".format(MillionSongDataDirectory), "rb") as f:
         trackIDSet = pickle.load(f)
     #Load the trackIDGenrePairs
-    with open("{}/trackIDGenrePairs.pickle".format(MillionSongDataDirectory), "rb") as f:
+    with open("{}\\trackIDGenrePairs.pickle".format(MillionSongDataDirectory), "rb") as f:
         trackIDGenrePairs = pickle.load(f)
     #Start the millionsongDataAPI
+    print("Done unpickling variables", end="\n")
     blockPrint() #To stop printing outputs
     databaseAPI = Api()
     #Create a pandas dataframe
@@ -69,7 +70,7 @@ if __name__ == "__main__":
                     #For the current song, append the genre information
                     currentGenre = trackIDGenrePairs[currentTrackID]
                     #Add the data to the dataframe
-                    currentSong['genre'] = currentSong
+                    currentSong['genre'] = currentGenre
                     savedData = savedData.append(currentSong,ignore_index=True)
         except Exception as e:
             #Print the error
