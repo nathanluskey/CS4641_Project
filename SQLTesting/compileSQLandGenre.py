@@ -12,6 +12,14 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+def isCompleteListing(song):
+    #Return true if all fields are non-Null
+    for elem in song:
+        if elem == None:
+            print(elem)
+            return False
+    return True
+    # any([elem == None for elem in song])
 
 
 if __name__ == "__main__":
@@ -33,10 +41,14 @@ if __name__ == "__main__":
     stepSize = 1000 #The amount of info passes from SQL into the code over each sweep of the database
     tracksFound = 0
     hasEnded = False
-    #Loop through all tracks in database
+    #Loop through all tracks in database until reached a limit of 5000
     # while i < 900:
-    while not hasEnded:
+    while (tracksFound < 5000) and (not hasEnded):
         try:
+            #Pickle while we're here in case I exit code
+            with open("allData.pickle", "wb") as f:
+                pickle.dump(savedData, f)
+            
             currentSongs = databaseAPI.getTracks(stepSize, offset=i)
             #Select the elements from the list of currentSongs
             for j in range(stepSize):
@@ -52,7 +64,7 @@ if __name__ == "__main__":
                 currentSong['track_id'] = currentSong['track_id'].replace(" ","")
                 #Checking if trackID is in the set
                 currentTrackID = currentSong['track_id']
-                if currentTrackID in trackIDSet:
+                if (currentTrackID in trackIDSet) and isCompleteListing(currentSong):
                     tracksFound += 1
                     #For the current song, append the genre information
                     currentGenre = trackIDGenrePairs[currentTrackID]
