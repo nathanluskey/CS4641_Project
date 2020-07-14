@@ -27,31 +27,46 @@ if __name__ == "__main__":
     #Start the millionsongDataAPI
     blockPrint() #To stop printing outputs
     databaseAPI = Api()
-    #All Attributes in the API
-    allTrackAttributes = ["track_id", "title", "artist_name", "artist_mbid", "artist_mbtags", "artist_mbtags_count", "artist_playmeid", "artist_terms", "artist_terms_freq", "artist_terms_weight", "audio_md5", "bars_confidence", "bars_start", "beats_confidence", "danceability", "duration", "end_of_fade_in", "energy", "key", "key_confidence", "loudness", "mode", "mode_confidence", "release", "release_7digitalid", "sections_confidence", "sections_start", "segments_confidence", "segments_loudness_max", "segments_loudness_max_time", "segments_loudness_start", "segments_pitches", "segments_start", "segments_timbre", "similar_artists", "song_hotttnesss", "song_id", "start_of_fade_out", "tatums_confidence", "tatums_start", "tempo", "time_signature", "time_signature_confidence", "track_7digitalid", "year"]
-    allTrackAttributes.append("genre")
     #Create a pandas dataframe
     savedData = pandas.DataFrame(data=None)
-    #TODO: Figure out the Number of entries in the database
-    numEntries = 10
+    i = 0 #71500# 715627 might find an error somewhere in this range
+    stepSize = 1000 #The amount of info passes from SQL into the code over each sweep of the database
+    tracksFound = 0
+    hasEnded = False
     #Loop through all tracks in database
-    for i in range(numEntries):
-        currentSong = databaseAPI.getTracks(1, offset=i)
-        #Select the first element from the list
-        currentSong = currentSong[0]
-        #There's a space on the front and back of the track_id
-        currentSong['track_id'] = currentSong['track_id'].replace(" ","")
-        #Checking if trackID is in the set
-        currentTrackID = currentSong['track_id']
-        if currentTrackID in trackIDSet:
-            enablePrint()
-            print(currentTrackID)
-            blockPrint()
-            #TODO: For the current song, append the genre information
-            currentGenre = trackIDGenrePairs[currentTrackID]
-            #Add the data to the dataframe
-            currentSong['genre'] = currentSong
-            savedData = savedData.append(currentSong,ignore_index=True)
+    # while i < 900:
+    while not hasEnded:
+        try:
+            currentSongs = databaseAPI.getTracks(stepSize, offset=i)
+            #Select the elements from the list of currentSongs
+            for j in range(stepSize):
+                enablePrint()
+                print("On song #{}, found genre of {} songs".format(i+j, tracksFound), end="\r")
+                blockPrint()
+                currentSong = currentSongs[j]
+                if not currentSong:
+                    #if currentSong is empty, then it's the end of the database
+                    hasEnded = True
+                    break #This means that the list is empty
+                #There's a space on the front and back of the track_id
+                currentSong['track_id'] = currentSong['track_id'].replace(" ","")
+                #Checking if trackID is in the set
+                currentTrackID = currentSong['track_id']
+                if currentTrackID in trackIDSet:
+                    tracksFound += 1
+                    #For the current song, append the genre information
+                    currentGenre = trackIDGenrePairs[currentTrackID]
+                    #Add the data to the dataframe
+                    currentSong['genre'] = currentSong
+                    savedData = savedData.append(currentSong,ignore_index=True)
+        except Exception as e:
+            #Print the error
+            print("Error: {}, on i = {}".format(e, i))
+        finally:
+            i += stepSize
+    #Pickle the data
+    with open("allData.pickle", "wb") as f:
+        pickle.dump(savedData, f)
     #Save the dataframe as a csv
     savedData.to_csv("compiledGenreData_AllAttributes.csv")
 
