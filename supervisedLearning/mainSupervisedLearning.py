@@ -22,7 +22,7 @@ if __name__ == "__main__":
     #Can look at example on MSD for info: 
     # importantFeatures = list(['artist_name', 'duration', 'energy', 'key', 'loudness', 'mode', 'end_of_fade_in', 'mode', 'song_hotttnesss', 'start_of_fade_out', 'tempo', 'time_signature', 'year'])
     # TODO: For now just look at numerical data
-    importantFeatures = list(['year'])
+    importantFeatures = list(['year', 'tempo', 'duration', 'loudness', 'mode', 'key'])
     allFeatures = np.empty(0)
     for featureTitle in importantFeatures:
         feature = csv[featureTitle]
@@ -80,7 +80,7 @@ if __name__ == "__main__":
             else:
                 node.set_fillcolor(colors[-1])
 
-    graph.write_png('trainingOnYear.png')
+    graph.write_png('trainingOnMultipleFeatures.png')
     print("i, Colors, and Genre")
 
     for i in range(len(uniqueGenres)):
