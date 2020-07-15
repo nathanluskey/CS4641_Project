@@ -41,18 +41,19 @@ if __name__ == "__main__":
     uniqueGenres = np.unique(genreLabels)
     #Initialize the tree
     #Documentation: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier
-    clf = tree.DecisionTreeClassifier(criterion="entropy", max_depth=3, random_state=0)
+    #TODO: Can also mess with leaf purity
+    clf = tree.DecisionTreeClassifier(criterion="entropy", random_state=0)
     #Train the tree
     clf = clf.fit(allFeatures, genreLabels)
     #Save the tree by pickling the model for persistence https://scikit-learn.org/stable/modules/model_persistence.html
     with open("clf.pickle", "wb") as f:
         pickle.dump(clf, f)
-    #Visualize the Tree
 
     # Visualize data
     dot_data = tree.export_graphviz(clf,
                                     feature_names=importantFeatures,
                                     class_names=uniqueGenres,
+                                    max_depth=5,
                                     out_file=None,
                                     filled=True,
                                     rounded=True)
@@ -80,7 +81,7 @@ if __name__ == "__main__":
             else:
                 node.set_fillcolor(colors[-1])
 
-    graph.write_png('trainingOnMultipleFeatures.png')
+    graph.write_png('trainingOnMultipleFeatures_LargeTree.png')
     print("i, Colors, and Genre")
 
     for i in range(len(uniqueGenres)):
