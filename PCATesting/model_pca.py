@@ -6,7 +6,9 @@ import pandas
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-file = pandas.read_csv(".\SQLTesting\compiledGenreData_AllAttributes.csv")
+
+#np.set_printoptions(threshold=np.inf)
+file = pandas.read_csv(".\SQLTesting\compiledGenreData_AllAttributes_5000songs.csv")
 features = ["bars_confidence","bars_start", "beats_confidence","beats_start","danceability",
     "duration", "end_of_fade_in","energy","key","key_confidence","loudness","mode",
     "mode_confidence","sections_confidence","sections_start","segments_confidence",
@@ -24,4 +26,5 @@ principle_X = pca.fit_transform(X)
 kmeans = KMeans(n_clusters=5)
 kmeans.fit(principle_X)
 print("dim reduced features: ", principle_X)
+
 print("labels: ", kmeans.labels_)
