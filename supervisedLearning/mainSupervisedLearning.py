@@ -41,8 +41,10 @@ if __name__ == "__main__":
     uniqueGenres = np.unique(genreLabels)
     #Initialize the tree
     #Documentation: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier
-    #TODO: Can also mess with leaf purity
-    clf = tree.DecisionTreeClassifier(criterion="entropy", random_state=0)
+    #TODO: Can also mess with leaf purity & min_samples_split
+    clf = tree.DecisionTreeClassifier(criterion="entropy", 
+                                      random_state=0,
+                                      min_samples_split=10)
     #Train the tree
     clf = clf.fit(allFeatures, genreLabels)
     #Save the tree by pickling the model for persistence https://scikit-learn.org/stable/modules/model_persistence.html
@@ -50,10 +52,10 @@ if __name__ == "__main__":
         pickle.dump(clf, f)
 
     # Visualize data
+    # Can use max_depth to better visualize all data
     dot_data = tree.export_graphviz(clf,
                                     feature_names=importantFeatures,
                                     class_names=uniqueGenres,
-                                    max_depth=5,
                                     out_file=None,
                                     filled=True,
                                     rounded=True)
@@ -68,7 +70,7 @@ if __name__ == "__main__":
     edges = graph.get_edge_list()
 
     #Create list of unique colors for each genre
-    colors = ('red', 'green', 'blue', 'orange', 'yellow', 'fuchsia', 'green', 'lightseagreen', 'silver', 'coral', 'lightpink', 'mediumpurple','lightsteelblue','mediumvioletred','peachpuff','thistle')
+    colors = ('red', 'green', 'blue', 'orange', 'yellow', 'fuchsia', 'green', 'lightseagreen', 'silver', 'coral', 'lightpink', 'mediumpurple','lightsteelblue','mediumvioletred','peachpuff','thistle', 'white')
     edges = collections.defaultdict(list)
 
     for node in nodes:
@@ -79,6 +81,7 @@ if __name__ == "__main__":
                 node.set_fillcolor(colors[np.argmax(values)])
             #mixed nodes get the default color
             else:
+                #If not a leaf node, color white
                 node.set_fillcolor(colors[-1])
 
     graph.write_png('trainingOnMultipleFeatures_LargeTree.png')
