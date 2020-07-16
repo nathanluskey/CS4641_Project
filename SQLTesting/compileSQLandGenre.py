@@ -14,12 +14,12 @@ def enablePrint():
 
 def isCompleteListing(song):
     #Return true if all fields are non-Null
+    if song['year'] == 0:
+        return False
     for elem in song:
         if elem == None:
-            print(elem)
             return False
     return True
-    # any([elem == None for elem in song])
 
 
 if __name__ == "__main__":
@@ -39,15 +39,18 @@ if __name__ == "__main__":
     #Create a pandas dataframe
     savedData = pandas.DataFrame(data=None)
     i = 0 #71500# 715627 might find an error somewhere in this range
-    stepSize = 1000 #The amount of info passes from SQL into the code over each sweep of the database
+    stepSize = 10000 #The amount of info passes from SQL into the code over each sweep of the database
     tracksFound = 0
     hasEnded = False
+    totalSongs = 5000
+    pickleFile = "allData5000.pickle"
+    csvFile = "compiledGenreData_AllAttributes_5000Songs.csv"
     #Loop through all tracks in database until reached a limit of 5000
     # while i < 900:
-    while (tracksFound < 5000) and (not hasEnded):
+    while (tracksFound < totalSongs) and (not hasEnded):
         try:
             #Pickle while we're here in case I exit code
-            with open("allData.pickle", "wb") as f:
+            with open(pickleFile, "wb") as f:
                 pickle.dump(savedData, f)
             
             currentSongs = databaseAPI.getTracks(stepSize, offset=i)
@@ -57,7 +60,7 @@ if __name__ == "__main__":
                 print("On song #{}, found genre of {} songs".format(i+j, tracksFound), end="\r")
                 blockPrint()
                 currentSong = currentSongs[j]
-                if not currentSong:
+                if (not currentSong) or (tracksFound > totalSongs):
                     #if currentSong is empty, then it's the end of the database
                     hasEnded = True
                     break #This means that the list is empty
@@ -78,9 +81,9 @@ if __name__ == "__main__":
         finally:
             i += stepSize
     #Pickle the data
-    with open("allData.pickle", "wb") as f:
+    with open(pickleFile, "wb") as f:
         pickle.dump(savedData, f)
     #Save the dataframe as a csv
-    savedData.to_csv("compiledGenreData_AllAttributes.csv")
+    savedData.to_csv(csvFile)
 
             
