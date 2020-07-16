@@ -7,4 +7,6 @@ msd_tagtraum_cd2c.cls
 # ignore anything in pycache
 *.pyc
 
+.venv
+.vscode
 million-songs
