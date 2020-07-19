@@ -127,13 +127,11 @@ if __name__ == "__main__":
     
     #Show accuracy on test set and training set
     plotAccuracy(ccp_alphas, train_scores, test_scores, "AlphaVSAccuracy.png", showPlot=False)
-
     #Get the optimal ccp_alpha corresponding to the highest test score:
-    optimal_ccp_alpha = ccp_alphas[test_scores == max(test_scores)]
-    optimal_clf = clfs[test_scores == max(test_scores)]
-    if isinstance(optimal_clf, list):
-        optimal_clf = optimal_clf[0]
-    print("optimal_ccp_alpha = {}".format(ccp_alphas[test_scores == max(test_scores)]))
+    optimal_ccp_alpha = ccp_alphas[np.where(test_scores == max(test_scores))[0][0]]
+    optimal_clf = clfs[np.where(test_scores == max(test_scores))[0][0]]
+    #Save the tree by pickling the model for persistence    
+    print("optimal_ccp_alpha = {}".format(optimal_ccp_alpha))
     print("Optimal Decision Tree Depth = {}".format(optimal_clf.get_depth()))
     #Save the tree by pickling the model for persistence
     with open("optimal_clf_pruned.pickle", "wb") as f:
