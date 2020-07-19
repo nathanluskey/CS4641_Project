@@ -117,9 +117,9 @@ if __name__ == "__main__":
     print("Done plotting impurities", end="\n")
     
     #Train decision trees with the different ccp_alphas
-    print("Training multiple decision trees", end="/r")
+    print("Training multiple decision trees", end="\r")
     clfs, ccp_alphas = trainDecisionTrees(ccp_alphas)
-    print("Done training multiple decision trees", end="/n")
+    print("Done training multiple decision trees", end="\n")
 
     #Compare accuracy on training and testing set
     train_scores = [clf.score(X_train, y_train) for clf in clfs]
@@ -130,11 +130,10 @@ if __name__ == "__main__":
 
     #Get the optimal ccp_alpha corresponding to the highest test score:
     optimal_ccp_alpha = ccp_alphas[test_scores == max(test_scores)]
-    print("optimal_ccp_alpha = {}".format(optimal_ccp_alpha))
-    #Train new tree with all data
-    optimal_clf = DecisionTreeClassifier(criterion="entropy")
-    optimal_clf.fit(importantFeatures, genreLabels)
-    #From the graph take the max ccp_alpha training set
+    optimal_clf = clfs[test_scores == max(test_scores)]
+    if isinstance(optimal_clf, list):
+        optimal_clf = optimal_clf[0]
+    print("optimal_ccp_alpha = {}".format(ccp_alphas[test_scores == max(test_scores)]))
     print("Optimal Decision Tree Depth = {}".format(optimal_clf.get_depth()))
     #Save the tree by pickling the model for persistence
     with open("optimal_clf_pruned.pickle", "wb") as f:
