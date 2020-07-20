@@ -1,7 +1,7 @@
 import os
-import pickle5 as pickle
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas
 
 
 def loadData():
@@ -9,30 +9,43 @@ def loadData():
     parentDirectory = os.path.dirname(os.getcwd())
     SQLDirectory = "{}\\SQLTesting".format(parentDirectory)
     #Load the file
-    with open("{}\\allData.pickle".format(SQLDirectory), "rb") as f:
-        allData = pickle.load(f)
-    return allData
+    csv = pandas.read_csv("{}\\compiledGenreData_AllAttributes_5000Songs.csv".format(SQLDirectory))
+    return csv
 
 if __name__ == "__main__":
     ## Load the fully compiled data
     allData = loadData()
     ## Get the genre labels & The tempo
-    genreLabels = np.array(allData['genre'])
-    tempos = np.array(allData['tempo'])
+    genreLabels = np.array(allData.loc[:, 'genre'])
+    tempos = np.array(allData.loc[:, 'tempo'])
     uniqueGenreLabels = np.unique(genreLabels)
     # print(uniqueGenreLabels)
-    #TODO: Create a box plot of variance of tempo across genre
+    # Create a box plot of variance of tempo across genre
     data = list()
     for genre in uniqueGenreLabels:
         booleanMask = genreLabels == genre
         genreTempos = tempos[booleanMask]
         data.append(genreTempos)
     
-    print("plotting data")
+    print("Creating Boxplot")
     fig1, ax1 = plt.subplots()
-    ax1.set_title('Basic Plot')
+    ax1.set_title('BPM vs. Genre')
     ax1.boxplot(data)
     plt.boxplot(data, labels=uniqueGenreLabels)
     ax1.set_xticklabels(uniqueGenreLabels)
+    ax1.set(xlabel = "Genre", ylabel= "Beats per Minute (BPM)")
+    fig1.savefig("BPMvsGenre_Boxplot.png")
+    
+    #Create a pi chart
+    print("Creating Pie Graph")
+    genreLengths = list()
+    for songGenre in data:
+        genreLengths.append(len(songGenre))
+    fig1, ax1 = plt.subplots()
+    ax1.pie(genreLengths, labels=uniqueGenreLabels, autopct="", startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    # ax1.set_title("Percentages of Genre")
+    fig1.savefig("PieChartOfGenre.png")
+    
+    #Show both plots
     plt.show()
-    # fig1.savefig("data.png")
