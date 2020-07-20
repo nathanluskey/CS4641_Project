@@ -8,7 +8,7 @@ import numpy as np
 import pydotplus
 import collections
 
-def saveGraph(clf, filename, max_depth=None, suppressPrinting=False):
+def saveGraph(clf, filename, max_depth=None, suppressPrinting=False, recolor=False):
 # Can use max_depth to better visualize all data
     dot_data = export_graphviz(clf,
                                 feature_names=importantFeatures,
@@ -21,24 +21,25 @@ def saveGraph(clf, filename, max_depth=None, suppressPrinting=False):
     
     #Using pydotplus
     graph = pydotplus.graph_from_dot_data(dot_data)
-    nodes = graph.get_node_list()
+    if recolor:
+        nodes = graph.get_node_list()
+        #Create list of unique colors for each genre
+        colors = ('red', 'green', 'blue', 'orange', 'yellow', 'fuchsia', 'green', 'lightseagreen', 'silver', 'coral', 'lightpink', 'mediumpurple','lightsteelblue','mediumvioletred','peachpuff','thistle', 'white')
 
-    #Create list of unique colors for each genre
-    colors = ('red', 'green', 'blue', 'orange', 'yellow', 'fuchsia', 'green', 'lightseagreen', 'silver', 'coral', 'lightpink', 'mediumpurple','lightsteelblue','mediumvioletred','peachpuff','thistle', 'white')
-
-    for node in nodes:
-        if node.get_name() not in ('node', 'edge'):
-            values = clf.tree_.value[int(node.get_name())][0]
-            #color only nodes where only one class is present
-            if max(values) == sum(values):    
+        for node in nodes:
+            if node.get_name() not in ('node', 'edge'):
+                values = clf.tree_.value[int(node.get_name())][0]
+                #color only nodes where only one class is present
                 node.set_fillcolor(colors[np.argmax(values)])
-            #mixed nodes get the default color
-            else:
-                #If not a leaf node, color white
-                node.set_fillcolor(colors[-1])
+                # if max(values) == sum(values):    
+                #     node.set_fillcolor(colors[np.argmax(values)])
+                # #mixed nodes get the default color
+                # else:
+                #     #If not a leaf node, color white
+                #     node.set_fillcolor(colors[-1])
 
     graph.write_png(filename)
-    if (not suppressPrinting):
+    if (not suppressPrinting) and (recolor):
         print("i, Colors, and Genre")
         for i in range(len(uniqueGenres)):
             print("\ti = {}, Color = {}, Genre = {}".format(i, colors[i], uniqueGenres[i]))
@@ -67,10 +68,12 @@ if __name__ == "__main__":
         print("Directory already exists")
     #Switch to new directory
     os.chdir(os.path.join(os.getcwd(), "AllDecisionTrees"))
-    for i in range(optimal_clf.get_depth()):
-        i = i + 1
-        print("Making graph for n={}".format(i), end="\r")
-        filename = "n={}_OptimalDecisionTree.png".format(i)
-        saveGraph(optimal_clf, filename, max_depth=i, suppressPrinting = True)
+    filename = "trainingOnMultipleFeatures_PCA_LargeTree_Pruned.png"
+    saveGraph(optimal_clf, filename, max_depth=None, suppressPrinting = True)
+    # for i in range(optimal_clf.get_depth()):
+    #     i = i + 1
+    #     print("Making graph for n={}".format(i), end="\r")
+    #     filename = "n={}_OptimalDecisionTree.png".format(i)
+    #     saveGraph(optimal_clf, filename, max_depth=i, suppressPrinting = True)
 
     
