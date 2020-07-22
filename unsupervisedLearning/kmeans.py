@@ -55,3 +55,5 @@ if __name__ == "__main__":
     find_optimal_num_clusters("Elbow Method with All Numerical Features",principle_X_all, max_K=15)
     find_optimal_num_clusters("Elbow Method with Important Numerical Features",principle_X_some, max_K=15)
     
+    # The png's don't really show an obvious elbow, but k=6 for all features and k=8 for important features seems pretty good
+
